@@ -1,71 +1,358 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Void Sentinel: Tactical Survival</title>
     <style>
         /* --- BASE GAME STYLES --- */
-        body { background: #0b0f19; color: #f8fafc; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; user-select: none; overflow: hidden; }
-        
-        #header { display: flex; flex-wrap: wrap; gap: 15px 30px; font-size: 1.1rem; font-weight: bold; margin-bottom: 20px; background: #1e293b; padding: 15px 30px; border-radius: 8px; border-bottom: 4px solid #3b82f6; box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 90%; max-width: 800px; justify-content: center; align-items: center; }
-        .stat { color: #94a3b8; display: flex; align-items: center; gap: 8px; } .stat span { color: #fff; }
-        
-        #btn-help { background: transparent; border: 2px solid #60a5fa; color: #60a5fa; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-left: auto; transition: 0.2s; }
-        #btn-help:hover { background: #60a5fa; color: #000; }
+        body {
+            background: #0b0f19;
+            color: #f8fafc;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            user-select: none;
+            overflow: hidden;
+        }
 
-        #board { display: grid; gap: 5px; margin-bottom: 20px; background: #0f172a; padding: 15px; border-radius: 8px; border: 2px solid #334155; transition: 0.3s; }
-        .cell { width: 55px; height: 55px; background: #1e293b; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; position: relative; border: 1px solid #334155; }
-        .cell:hover { background: #334155; border-color: #64748b; }
-        
-        .hp-bar-container { position: absolute; bottom: 2px; width: 80%; height: 6px; background: #000; border-radius: 3px; overflow: hidden; }
-        .hp-bar-fill { height: 100%; background: #ef4444; transition: width 0.3s; }
+        #header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: #1e293b;
+            padding: 15px 30px;
+            border-radius: 8px;
+            border-bottom: 4px solid #3b82f6;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 800px;
+            justify-content: center;
+            align-items: center;
+        }
 
-        #actions { display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; justify-content: center; }
-        .btn { background: #1e293b; border: 2px solid #475569; padding: 12px 20px; border-radius: 6px; cursor: pointer; color: white; font-weight: bold; transition: 0.2s; text-align: center; }
-        .btn:hover { border-color: #3b82f6; background: #2dd4bf; color: #000; }
-        .btn.active { background: #3b82f6; color: #000; border-color: #93c5fd; box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
-        
-        #end-turn { padding: 15px 50px; background: #ef4444; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1.1rem; transition: 0.2s; }
-        #end-turn:hover { background: #dc2626; box-shadow: 0 0 20px rgba(239, 68, 68, 0.4); }
-        
-        #log { margin-top: 15px; color: #94a3b8; font-weight: bold; font-size: 1.1rem; min-height: 25px; text-align: center; }
-        
-        .svg-icon { width: 80%; height: 80%; }
-        .sentinel { stroke: #3b82f6; filter: drop-shadow(0 0 5px #3b82f6); }
-        .alien { fill: #ef4444; filter: drop-shadow(0 0 5px #ef4444); }
-        .wall { fill: #475569; }
+        .stat {
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat span {
+            color: #fff;
+        }
+
+        #btn-help {
+            background: transparent;
+            border: 2px solid #60a5fa;
+            color: #60a5fa;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: auto;
+            transition: 0.2s;
+        }
+
+        #btn-help:hover {
+            background: #60a5fa;
+            color: #000;
+        }
+
+        #board {
+            display: grid;
+            gap: 5px;
+            margin-bottom: 20px;
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #334155;
+            transition: 0.3s;
+        }
+
+        .cell {
+            width: 55px;
+            height: 55px;
+            background: #1e293b;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            position: relative;
+            border: 1px solid #334155;
+        }
+
+        .cell:hover {
+            background: #334155;
+            border-color: #64748b;
+        }
+
+        .hp-bar-container {
+            position: absolute;
+            bottom: 2px;
+            width: 80%;
+            height: 6px;
+            background: #000;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .hp-bar-fill {
+            height: 100%;
+            background: #ef4444;
+            transition: width 0.3s;
+        }
+
+        #actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            background: #1e293b;
+            border: 2px solid #475569;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            transition: 0.2s;
+            text-align: center;
+        }
+
+        .btn:hover {
+            border-color: #3b82f6;
+            background: #2dd4bf;
+            color: #000;
+        }
+
+        .btn.active {
+            background: #3b82f6;
+            color: #000;
+            border-color: #93c5fd;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+
+        #end-turn {
+            padding: 15px 50px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: 0.2s;
+        }
+
+        #end-turn:hover {
+            background: #dc2626;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+        }
+
+        #log {
+            margin-top: 15px;
+            color: #94a3b8;
+            font-weight: bold;
+            font-size: 1.1rem;
+            min-height: 25px;
+            text-align: center;
+        }
+
+        .svg-icon {
+            width: 80%;
+            height: 80%;
+        }
+
+        .sentinel {
+            stroke: #3b82f6;
+            filter: drop-shadow(0 0 5px #3b82f6);
+        }
+
+        .alien {
+            fill: #ef4444;
+            filter: drop-shadow(0 0 5px #ef4444);
+        }
+
+        .wall {
+            fill: #475569;
+        }
 
         /* --- DRAFT OVERLAY STYLES --- */
-        #draft-screen { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; display: none; padding: 20px; text-align: center; }
-        .draft-cards { display: flex; gap: 20px; margin-top: 30px; flex-wrap: wrap; justify-content: center; }
-        .draft-card { background: #1e293b; border: 2px solid #facc15; padding: 20px; border-radius: 10px; width: 220px; text-align: center; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; justify-content: center; }
-        .draft-card:hover { background: #facc15; color: #000; transform: translateY(-10px); box-shadow: 0 10px 20px rgba(250, 204, 21, 0.4); }
-        .draft-card h3 { margin-top: 0; }
+        #draft-screen {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            display: none;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .draft-cards {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .draft-card {
+            background: #1e293b;
+            border: 2px solid #facc15;
+            padding: 20px;
+            border-radius: 10px;
+            width: 220px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .draft-card:hover {
+            background: #facc15;
+            color: #000;
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(250, 204, 21, 0.4);
+        }
+
+        .draft-card h3 {
+            margin-top: 0;
+        }
 
         /* --- INSTRUCTION MANUAL (CODEX) STYLES --- */
-        #codex-overlay { position: fixed; inset: 0; background: rgba(5, 7, 15, 0.95); z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
-        #codex-content { background: #0f172a; border: 2px solid #3b82f6; border-radius: 12px; width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 30px rgba(59, 130, 246, 0.3); display: flex; flex-direction: column; }
-        .codex-header { background: #1e293b; padding: 20px; border-bottom: 2px solid #3b82f6; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; }
-        .codex-header h2 { margin: 0; color: #60a5fa; letter-spacing: 2px; font-size: 1.5rem; text-transform: uppercase; }
-        .close-btn { background: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .close-btn:hover { background: #dc2626; box-shadow: 0 0 10px #ef4444; }
+        #codex-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 7, 15, 0.95);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
 
-        .codex-body { padding: 30px; color: #cbd5e1; line-height: 1.6; }
-        .codex-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px; }
-        .codex-section { background: #1e293b; padding: 20px; border-radius: 8px; border-left: 4px solid #facc15; }
-        .codex-section h3 { color: #facc15; margin-top: 0; font-size: 1.2rem; }
+        #codex-content {
+            background: #0f172a;
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .codex-header {
+            background: #1e293b;
+            padding: 20px;
+            border-bottom: 2px solid #3b82f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+        }
+
+        .codex-header h2 {
+            margin: 0;
+            color: #60a5fa;
+            letter-spacing: 2px;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .close-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #dc2626;
+            box-shadow: 0 0 10px #ef4444;
+        }
+
+        .codex-body {
+            padding: 30px;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .codex-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .codex-section {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #facc15;
+        }
+
+        .codex-section h3 {
+            color: #facc15;
+            margin-top: 0;
+            font-size: 1.2rem;
+        }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .codex-grid { grid-template-columns: 1fr; gap: 15px; }
-            .codex-header h2 { font-size: 1.2rem; }
-            #codex-content { max-height: 95vh; }
-            .codex-body { padding: 15px; }
-            .cell { width: 40px; height: 40px; }
+            .codex-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .codex-header h2 {
+                font-size: 1.2rem;
+            }
+
+            #codex-content {
+                max-height: 95vh;
+            }
+
+            .codex-body {
+                padding: 15px;
+            }
+
+            .cell {
+                width: 40px;
+                height: 40px;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <div id="codex-overlay">
@@ -75,30 +362,36 @@
                 <button class="close-btn" onclick="closeCodex()">CLOSE</button>
             </div>
             <div class="codex-body">
-                <p>Welcome to the Void. You are humanity's last Sentinel. Your mission is to survive infinite sectors by managing your Action Points (AP) and eliminating the Alien threat.</p>
-                
+                <p>Welcome to the Void. You are humanity's last Sentinel. Your mission is to survive infinite sectors by
+                    managing your Action Points (AP) and eliminating the Alien threat.</p>
+
                 <div class="codex-grid">
                     <div class="codex-section">
                         <h3>⚡ Action Points (AP)</h3>
-                        <p>Every move and attack costs AP. You start with 3 AP per turn. If you run out, you must <strong>END TURN</strong>, allowing the enemies to advance.</p>
+                        <p>Every move and attack costs AP. You start with 3 AP per turn. If you run out, you must
+                            <strong>END TURN</strong>, allowing the enemies to advance.</p>
                     </div>
-                    
+
                     <div class="codex-section">
                         <h3>🎯 Combat Tactics</h3>
                         <ul style="padding-left: 20px;">
-                            <li><strong>SHOOT (1 AP):</strong> Fires in a straight line. Deals 3 Dmg. Blocked by walls.</li>
-                            <li><strong>GRENADE (2 AP):</strong> Hits a 3x3 area. Deals 3 Dmg. Ignores walls. Will hurt you if you are in the blast radius!</li>
+                            <li><strong>SHOOT (1 AP):</strong> Fires in a straight line. Deals 3 Dmg. Blocked by walls.
+                            </li>
+                            <li><strong>GRENADE (2 AP):</strong> Hits a 3x3 area. Deals 3 Dmg. Ignores walls. Will hurt
+                                you if you are in the blast radius!</li>
                         </ul>
                     </div>
 
                     <div class="codex-section">
                         <h3>👾 Hostiles</h3>
-                        <p>Aliens move 1 tile per turn. If they end their turn next to you, you lose 1 HP. Every 5 Sectors, a <strong>BOSS</strong> spawns. Bosses have massive health and hit for 3 HP.</p>
+                        <p>Aliens move 1 tile per turn. If they end their turn next to you, you lose 1 HP. Every 5
+                            Sectors, a <strong>BOSS</strong> spawns. Bosses have massive health and hit for 3 HP.</p>
                     </div>
 
                     <div class="codex-section">
                         <h3>🧬 Upgrades & Permutations</h3>
-                        <p>Defeating a Boss allows you to draft a permanent upgrade. Combine perks like <em>Vampire Rounds</em> with <em>Heavy Shrapnel</em> to build a devastating tactical engine.</p>
+                        <p>Defeating a Boss allows you to draft a permanent upgrade. Combine perks like <em>Vampire
+                                Rounds</em> with <em>Heavy Shrapnel</em> to build a devastating tactical engine.</p>
                     </div>
                 </div>
             </div>
@@ -106,7 +399,8 @@
     </div>
 
     <div id="draft-screen">
-        <h1 style="color: #facc15; text-shadow: 0 0 20px #facc15; font-size: 3rem; margin-bottom: 10px;">BOSS DEFEATED!</h1>
+        <h1 style="color: #facc15; text-shadow: 0 0 20px #facc15; font-size: 3rem; margin-bottom: 10px;">BOSS DEFEATED!
+        </h1>
         <h2 style="color: #fff;">Select a Permanent Upgrade to augment your build:</h2>
         <div class="draft-cards" id="draft-options"></div>
     </div>
@@ -131,239 +425,240 @@
     <button id="end-turn" onclick="endTurn()">END TURN</button>
     <div id="log">Initializing Sector 1...</div>
 
-<script>
-    // --- SVG ASSETS ---
-    const svgSentinel = `<svg class="svg-icon sentinel" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><circle cx="12" cy="11" r="3"></circle></svg>`;
-    const svgAlien = `<svg class="svg-icon alien" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm4 0c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm-2-7c-2.76 0-5 2.24-5 5h10c0-2.76-2.24-5-5-5z"/></svg>`;
-    const svgWall = `<svg class="svg-icon wall" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line><line x1="2" y1="16" x2="22" y2="16"></line><line x1="8" y1="10" x2="8" y2="16"></line><line x1="16" y1="16" x2="16" y2="22"></line><line x1="16" y1="4" x2="16" y2="10"></line></svg>`;
+    <script>
+        // --- SVG ASSETS ---
+        const svgSentinel = `<svg class="svg-icon sentinel" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><circle cx="12" cy="11" r="3"></circle></svg>`;
+        const svgAlien = `<svg class="svg-icon alien" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm4 0c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm-2-7c-2.76 0-5 2.24-5 5h10c0-2.76-2.24-5-5-5z"/></svg>`;
+        const svgWall = `<svg class="svg-icon wall" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line><line x1="2" y1="16" x2="22" y2="16"></line><line x1="8" y1="10" x2="8" y2="16"></line><line x1="16" y1="16" x2="16" y2="22"></line><line x1="16" y1="4" x2="16" y2="10"></line></svg>`;
 
-    // --- STATE ---
-    let currentLevel = 0;
-    let gridSize = 5;
-    let state = { hp: 10, maxHp: 10, maxAp: 3, ap: 3, px: 2, py: 2, activeAction: null, perks: [] };
-    let entities = []; 
-    
-    let highScore = localStorage.getItem('voidSentinelScore') || 1;
-    document.getElementById('highscore').innerText = highScore;
+        // --- STATE ---
+        let currentLevel = 0;
+        let gridSize = 5;
+        let state = { hp: 10, maxHp: 10, maxAp: 3, ap: 3, px: 2, py: 2, activeAction: null, perks: [] };
+        let entities = [];
 
-    const availablePerks = [
-        { id: "VAMPIRE", name: "Vampire Rounds", desc: "Killing an enemy heals you for 1 HP." },
-        { id: "BATTERY", name: "Overcharge", desc: "Permanently gain +1 Max AP." },
-        { id: "SHRAPNEL", name: "Heavy Shrapnel", desc: "Grenades deal +2 damage." },
-        { id: "SNIPER", name: "Laser Sight", desc: "Shooting deals +2 damage." }
-    ];
+        let highScore = localStorage.getItem('voidSentinelScore') || 1;
+        document.getElementById('highscore').innerText = highScore;
 
-    // --- UI FUNCTIONS ---
-    function log(msg) { document.getElementById('log').innerHTML = msg; }
-    function openCodex() { document.getElementById('codex-overlay').style.display = 'flex'; }
-    function closeCodex() { document.getElementById('codex-overlay').style.display = 'none'; }
+        const availablePerks = [
+            { id: "VAMPIRE", name: "Vampire Rounds", desc: "Killing an enemy heals you for 1 HP." },
+            { id: "BATTERY", name: "Overcharge", desc: "Permanently gain +1 Max AP." },
+            { id: "SHRAPNEL", name: "Heavy Shrapnel", desc: "Grenades deal +2 damage." },
+            { id: "SNIPER", name: "Laser Sight", desc: "Shooting deals +2 damage." }
+        ];
 
-    window.onload = () => {
-        if(!localStorage.getItem('voidSentinelTutorialSeen')) {
-            openCodex();
-            localStorage.setItem('voidSentinelTutorialSeen', 'true');
-        }
-    };
+        // --- UI FUNCTIONS ---
+        function log(msg) { document.getElementById('log').innerHTML = msg; }
+        function openCodex() { document.getElementById('codex-overlay').style.display = 'flex'; }
+        function closeCodex() { document.getElementById('codex-overlay').style.display = 'none'; }
 
-    function checkHighscore() {
-        if (currentLevel + 1 > highScore) {
-            highScore = currentLevel + 1;
-            localStorage.setItem('voidSentinelScore', highScore);
-            document.getElementById('highscore').innerText = highScore;
-        }
-    }
+        window.onload = () => {
+            if (!localStorage.getItem('voidSentinelTutorialSeen')) {
+                openCodex();
+                localStorage.setItem('voidSentinelTutorialSeen', 'true');
+            }
+        };
 
-    // --- GAME LOGIC ---
-    function openDraft() {
-        document.getElementById('draft-screen').style.display = 'flex';
-        const draftContainer = document.getElementById('draft-options');
-        draftContainer.innerHTML = '';
-        
-        let options = [...availablePerks].sort(() => 0.5 - Math.random()).slice(0, 3);
-        
-        options.forEach(perk => {
-            let card = document.createElement('div');
-            card.className = 'draft-card';
-            card.innerHTML = `<h3>${perk.name}</h3><p>${perk.desc}</p>`;
-            card.onclick = () => {
-                state.perks.push(perk.id);
-                if(perk.id === "BATTERY") state.maxAp++;
-                document.getElementById('perk-list').innerText = "UPGRADES: " + state.perks.length;
-                document.getElementById('draft-screen').style.display = 'none';
-                loadLevel(currentLevel + 1);
-            };
-            draftContainer.appendChild(card);
-        });
-    }
-
-    function loadLevel(lvlIndex) {
-        currentLevel = lvlIndex;
-        checkHighscore();
-        
-        gridSize = Math.min(5 + Math.floor(lvlIndex / 3), 8);
-        let isBossLevel = ((lvlIndex + 1) % 5 === 0);
-        
-        state.px = Math.floor(gridSize / 2); state.py = Math.floor(gridSize / 2);
-        state.hp = Math.min(state.maxHp, state.hp + 3); 
-        state.ap = state.maxAp;
-        
-        entities = [];
-        let numWalls = 1 + lvlIndex;
-        for(let i=0; i<numWalls; i++) spawnEntity('wall');
-
-        let numEnemies = isBossLevel ? 2 + Math.floor(lvlIndex/2) : 3 + lvlIndex;
-        let baseHp = 3 + Math.floor(lvlIndex * 0.5); 
-        for(let i=0; i<numEnemies; i++) spawnEntity('enemy', baseHp, false);
-
-        if(isBossLevel) spawnEntity('enemy', 15 + (lvlIndex * 2), true);
-        
-        // Mobile responsive cell sizing
-        let cellSize = window.innerWidth < 768 ? 40 : 55;
-        document.getElementById('board').style.gridTemplateColumns = `repeat(${gridSize}, ${cellSize}px)`;
-        document.getElementById('board').style.gridTemplateRows = `repeat(${gridSize}, ${cellSize}px)`;
-        
-        log(isBossLevel ? `<span style="color:#ef4444">BOSS PROTOCOL ENGAGED.</span>` : `Sector ${lvlIndex + 1} Generated.`);
-        buildBoard();
-        updateRender();
-    }
-
-    function spawnEntity(type, hp = 0, isBoss = false) {
-        let placed = false;
-        while(!placed) {
-            let rx = Math.floor(Math.random() * gridSize);
-            let ry = Math.floor(Math.random() * gridSize);
-            if((rx !== state.px || ry !== state.py) && !getEntity(rx, ry)) {
-                if(type === 'wall') entities.push({ type: 'wall', x: rx, y: ry });
-                else entities.push({ type: 'enemy', x: rx, y: ry, hp: hp, max: hp, boss: isBoss });
-                placed = true;
+        function checkHighscore() {
+            if (currentLevel + 1 > highScore) {
+                highScore = currentLevel + 1;
+                localStorage.setItem('voidSentinelScore', highScore);
+                document.getElementById('highscore').innerText = highScore;
             }
         }
-    }
 
-    function buildBoard() {
-        const board = document.getElementById('board');
-        board.innerHTML = '';
-        for(let y=0; y<gridSize; y++) {
-            for(let x=0; x<gridSize; x++) {
-                let cell = document.createElement('div');
-                cell.className = 'cell';
-                cell.id = `c-${x}-${y}`;
-                cell.onclick = () => executeAction(x, y);
-                board.appendChild(cell);
+        // --- GAME LOGIC ---
+        function openDraft() {
+            document.getElementById('draft-screen').style.display = 'flex';
+            const draftContainer = document.getElementById('draft-options');
+            draftContainer.innerHTML = '';
+
+            let options = [...availablePerks].sort(() => 0.5 - Math.random()).slice(0, 3);
+
+            options.forEach(perk => {
+                let card = document.createElement('div');
+                card.className = 'draft-card';
+                card.innerHTML = `<h3>${perk.name}</h3><p>${perk.desc}</p>`;
+                card.onclick = () => {
+                    state.perks.push(perk.id);
+                    if (perk.id === "BATTERY") state.maxAp++;
+                    document.getElementById('perk-list').innerText = "UPGRADES: " + state.perks.length;
+                    document.getElementById('draft-screen').style.display = 'none';
+                    loadLevel(currentLevel + 1);
+                };
+                draftContainer.appendChild(card);
+            });
+        }
+
+        function loadLevel(lvlIndex) {
+            currentLevel = lvlIndex;
+            checkHighscore();
+
+            gridSize = Math.min(5 + Math.floor(lvlIndex / 3), 8);
+            let isBossLevel = ((lvlIndex + 1) % 5 === 0);
+
+            state.px = Math.floor(gridSize / 2); state.py = Math.floor(gridSize / 2);
+            state.hp = Math.min(state.maxHp, state.hp + 3);
+            state.ap = state.maxAp;
+
+            entities = [];
+            let numWalls = 1 + lvlIndex;
+            for (let i = 0; i < numWalls; i++) spawnEntity('wall');
+
+            let numEnemies = isBossLevel ? 2 + Math.floor(lvlIndex / 2) : 3 + lvlIndex;
+            let baseHp = 3 + Math.floor(lvlIndex * 0.5);
+            for (let i = 0; i < numEnemies; i++) spawnEntity('enemy', baseHp, false);
+
+            if (isBossLevel) spawnEntity('enemy', 15 + (lvlIndex * 2), true);
+
+            // Mobile responsive cell sizing
+            let cellSize = window.innerWidth < 768 ? 40 : 55;
+            document.getElementById('board').style.gridTemplateColumns = `repeat(${gridSize}, ${cellSize}px)`;
+            document.getElementById('board').style.gridTemplateRows = `repeat(${gridSize}, ${cellSize}px)`;
+
+            log(isBossLevel ? `<span style="color:#ef4444">BOSS PROTOCOL ENGAGED.</span>` : `Sector ${lvlIndex + 1} Generated.`);
+            buildBoard();
+            updateRender();
+        }
+
+        function spawnEntity(type, hp = 0, isBoss = false) {
+            let placed = false;
+            while (!placed) {
+                let rx = Math.floor(Math.random() * gridSize);
+                let ry = Math.floor(Math.random() * gridSize);
+                if ((rx !== state.px || ry !== state.py) && !getEntity(rx, ry)) {
+                    if (type === 'wall') entities.push({ type: 'wall', x: rx, y: ry });
+                    else entities.push({ type: 'enemy', x: rx, y: ry, hp: hp, max: hp, boss: isBoss });
+                    placed = true;
+                }
             }
         }
-    }
 
-    function selectAction(actionName, el) {
-        document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
-        el.classList.add('active');
-        state.activeAction = actionName;
-        log(`Mode: <b>${actionName}</b>. Select grid target.`);
-    }
-
-    function getEntity(x, y) { return entities.find(e => e.x === x && e.y === y); }
-
-    function executeAction(x, y) {
-        if(!state.activeAction) return;
-        let cost = state.activeAction === 'GRENADE' ? 2 : 1;
-        if(state.ap < cost) return log("Insufficient AP.");
-
-        if(state.activeAction === 'MOVE') {
-            if(Math.abs(state.px - x) > 1 || Math.abs(state.py - y) > 1) return log("Invalid movement.");
-            if(getEntity(x, y) || (state.px === x && state.py === y)) return log("Path blocked.");
-            state.px = x; state.py = y;
-        } 
-        else if(state.activeAction === 'SHOOT') {
-            let ent = getEntity(x, y);
-            if(!ent || ent.type !== 'enemy') return;
-            if(state.px !== x && state.py !== y) return;
-            
-            let blocked = false;
-            if(state.px === x) {
-                let minY = Math.min(state.py, y), maxY = Math.max(state.py, y);
-                for(let i = minY + 1; i < maxY; i++) if(getEntity(x, i)?.type === 'wall') blocked = true;
-            } else {
-                let minX = Math.min(state.px, x), maxX = Math.max(state.px, x);
-                for(let i = minX + 1; i < maxX; i++) if(getEntity(i, y)?.type === 'wall') blocked = true;
+        function buildBoard() {
+            const board = document.getElementById('board');
+            board.innerHTML = '';
+            for (let y = 0; y < gridSize; y++) {
+                for (let x = 0; x < gridSize; x++) {
+                    let cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.id = `c-${x}-${y}`;
+                    cell.onclick = () => executeAction(x, y);
+                    board.appendChild(cell);
+                }
             }
-            if(blocked) return log("Wall blocking line of sight.");
-
-            let dmg = state.perks.includes("SNIPER") ? 5 : 3;
-            ent.hp -= dmg; 
-            if(ent.hp <= 0 && state.perks.includes("VAMPIRE")) state.hp = Math.min(state.maxHp, state.hp + 1);
         }
-        else if(state.activeAction === 'GRENADE') {
-            let dmg = state.perks.includes("SHRAPNEL") ? 5 : 3;
-            entities.forEach(ent => {
-                if(ent.type === 'enemy' && Math.abs(ent.x - x) <= 1 && Math.abs(ent.y - y) <= 1) {
-                    ent.hp -= dmg;
-                    if(ent.hp <= 0 && state.perks.includes("VAMPIRE")) state.hp = Math.min(state.maxHp, state.hp + 1);
+
+        function selectAction(actionName, el) {
+            document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            state.activeAction = actionName;
+            log(`Mode: <b>${actionName}</b>. Select grid target.`);
+        }
+
+        function getEntity(x, y) { return entities.find(e => e.x === x && e.y === y); }
+
+        function executeAction(x, y) {
+            if (!state.activeAction) return;
+            let cost = state.activeAction === 'GRENADE' ? 2 : 1;
+            if (state.ap < cost) return log("Insufficient AP.");
+
+            if (state.activeAction === 'MOVE') {
+                if (Math.abs(state.px - x) > 1 || Math.abs(state.py - y) > 1) return log("Invalid movement.");
+                if (getEntity(x, y) || (state.px === x && state.py === y)) return log("Path blocked.");
+                state.px = x; state.py = y;
+            }
+            else if (state.activeAction === 'SHOOT') {
+                let ent = getEntity(x, y);
+                if (!ent || ent.type !== 'enemy') return;
+                if (state.px !== x && state.py !== y) return;
+
+                let blocked = false;
+                if (state.px === x) {
+                    let minY = Math.min(state.py, y), maxY = Math.max(state.py, y);
+                    for (let i = minY + 1; i < maxY; i++) if (getEntity(x, i)?.type === 'wall') blocked = true;
+                } else {
+                    let minX = Math.min(state.px, x), maxX = Math.max(state.px, x);
+                    for (let i = minX + 1; i < maxX; i++) if (getEntity(i, y)?.type === 'wall') blocked = true;
+                }
+                if (blocked) return log("Wall blocking line of sight.");
+
+                let dmg = state.perks.includes("SNIPER") ? 5 : 3;
+                ent.hp -= dmg;
+                if (ent.hp <= 0 && state.perks.includes("VAMPIRE")) state.hp = Math.min(state.maxHp, state.hp + 1);
+            }
+            else if (state.activeAction === 'GRENADE') {
+                let dmg = state.perks.includes("SHRAPNEL") ? 5 : 3;
+                entities.forEach(ent => {
+                    if (ent.type === 'enemy' && Math.abs(ent.x - x) <= 1 && Math.abs(ent.y - y) <= 1) {
+                        ent.hp -= dmg;
+                        if (ent.hp <= 0 && state.perks.includes("VAMPIRE")) state.hp = Math.min(state.maxHp, state.hp + 1);
+                    }
+                });
+                if (Math.abs(state.px - x) <= 1 && Math.abs(state.py - y) <= 1) state.hp -= dmg;
+            }
+
+            state.ap -= cost;
+            entities = entities.filter(e => e.type === 'wall' || e.hp > 0);
+            document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+            state.activeAction = null;
+            updateRender();
+
+            if (!entities.some(e => e.type === 'enemy')) {
+                setTimeout(() => {
+                    if ((currentLevel + 1) % 5 === 0) openDraft();
+                    else loadLevel(currentLevel + 1);
+                }, 600);
+            }
+        }
+
+        function endTurn() {
+            let enemies = entities.filter(e => e.type === 'enemy');
+            enemies.forEach(e => {
+                let dx = state.px - e.x;
+                let dy = state.py - e.y;
+                if (Math.abs(dx) <= 1 && Math.abs(dy) <= 1) {
+                    state.hp -= e.boss ? 3 : 1;
+                } else {
+                    let nextX = e.x + Math.sign(dx);
+                    let nextY = e.y + Math.sign(dy);
+                    if (!getEntity(nextX, e.y) && !(state.px === nextX && state.py === e.y)) e.x = nextX;
+                    else if (!getEntity(e.x, nextY) && !(state.px === e.x && state.py === nextY)) e.y = nextY;
                 }
             });
-            if(Math.abs(state.px - x) <= 1 && Math.abs(state.py - y) <= 1) state.hp -= dmg; 
+
+            state.ap = state.maxAp;
+            updateRender();
+            if (state.hp <= 0) { alert(`GAME OVER. Survived until Sector ${currentLevel + 1}.`); location.reload(); }
         }
 
-        state.ap -= cost;
-        entities = entities.filter(e => e.type === 'wall' || e.hp > 0); 
-        document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
-        state.activeAction = null;
-        updateRender();
-
-        if(!entities.some(e => e.type === 'enemy')) {
-            setTimeout(() => { 
-                if((currentLevel + 1) % 5 === 0) openDraft();
-                else loadLevel(currentLevel + 1); 
-            }, 600);
-        }
-    }
-
-    function endTurn() {
-        let enemies = entities.filter(e => e.type === 'enemy');
-        enemies.forEach(e => {
-            let dx = state.px - e.x;
-            let dy = state.py - e.y;
-            if(Math.abs(dx) <= 1 && Math.abs(dy) <= 1) {
-                state.hp -= e.boss ? 3 : 1; 
-            } else {
-                let nextX = e.x + Math.sign(dx);
-                let nextY = e.y + Math.sign(dy);
-                if(!getEntity(nextX, e.y) && !(state.px === nextX && state.py === e.y)) e.x = nextX;
-                else if(!getEntity(e.x, nextY) && !(state.px === e.x && state.py === nextY)) e.y = nextY;
-            }
-        });
-
-        state.ap = state.maxAp; 
-        updateRender();
-        if(state.hp <= 0) { alert(`GAME OVER. Survived until Sector ${currentLevel + 1}.`); location.reload(); }
-    }
-
-    function updateRender() {
-        document.querySelectorAll('.cell').forEach(c => c.innerHTML = '');
-        entities.forEach(ent => {
-            let cell = document.getElementById(`c-${ent.x}-${ent.y}`);
-            if(cell) {
-                if(ent.type === 'wall') cell.innerHTML = svgWall;
-                if(ent.type === 'enemy') {
-                    let hpPercent = Math.max(0, (ent.hp / ent.max) * 100);
-                    let sizeStyle = ent.boss ? "transform: scale(1.3);" : "";
-                    cell.innerHTML = `
+        function updateRender() {
+            document.querySelectorAll('.cell').forEach(c => c.innerHTML = '');
+            entities.forEach(ent => {
+                let cell = document.getElementById(`c-${ent.x}-${ent.y}`);
+                if (cell) {
+                    if (ent.type === 'wall') cell.innerHTML = svgWall;
+                    if (ent.type === 'enemy') {
+                        let hpPercent = Math.max(0, (ent.hp / ent.max) * 100);
+                        let sizeStyle = ent.boss ? "transform: scale(1.3);" : "";
+                        cell.innerHTML = `
                         <div style="${sizeStyle}">${svgAlien}</div>
                         <div class="hp-bar-container"><div class="hp-bar-fill" style="width: ${hpPercent}%"></div></div>
                     `;
+                    }
                 }
-            }
-        });
-        let pCell = document.getElementById(`c-${state.px}-${state.py}`);
-        if(pCell) pCell.innerHTML = svgSentinel;
+            });
+            let pCell = document.getElementById(`c-${state.px}-${state.py}`);
+            if (pCell) pCell.innerHTML = svgSentinel;
 
-        document.getElementById('hp').innerText = state.hp;
-        document.getElementById('ap').innerText = state.ap;
-        document.getElementById('max-ap').innerText = state.maxAp;
-        document.getElementById('level').innerText = currentLevel + 1;
-    }
+            document.getElementById('hp').innerText = state.hp;
+            document.getElementById('ap').innerText = state.ap;
+            document.getElementById('max-ap').innerText = state.maxAp;
+            document.getElementById('level').innerText = currentLevel + 1;
+        }
 
-    // --- BOOT ---
-    loadLevel(0);
-</script>
+        // --- BOOT ---
+        loadLevel(0);
+    </script>
 </body>
+
 </html>

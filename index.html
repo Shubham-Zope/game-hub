@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Game Hub | Indie Arcade</title>
+    <style>
+        :root { 
+            --bg: #050505; 
+            --text: #f0f0f0; 
+            --accent: #3b82f6; 
+            --accent-glow: rgba(59, 130, 246, 0.5); 
+        }
+        
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background-color: var(--bg); 
+            color: var(--text); 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, #050505 70%); 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        }
+        
+        header { 
+            text-align: center; 
+            padding: 80px 20px 40px 20px; 
+            width: 100%; 
+        }
+        
+        h1 { 
+            font-size: 4rem; 
+            margin: 0; 
+            background: linear-gradient(to right, #60a5fa, #a78bfa); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            letter-spacing: 2px; 
+            text-transform: uppercase;
+        }
+        
+        p.subtitle { 
+            color: #94a3b8; 
+            font-size: 1.2rem; 
+            max-width: 600px; 
+            margin: 15px auto; 
+            line-height: 1.6; 
+        }
+
+        .game-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 30px; 
+            width: 90%; 
+            max-width: 1100px; 
+            padding: 20px 0 80px 0; 
+        }
+        
+        .game-card { 
+            background: #0f172a; 
+            border: 1px solid #334155; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            text-decoration: none; 
+            color: inherit; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        
+        .game-card:hover { 
+            transform: translateY(-10px); 
+            border-color: var(--accent); 
+            box-shadow: 0 15px 30px var(--accent-glow); 
+        }
+        
+        .card-image { 
+            height: 180px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 4rem; 
+            border-bottom: 1px solid #334155; 
+        }
+        
+        .card-content { 
+            padding: 25px; 
+            display: flex; 
+            flex-direction: column; 
+            flex-grow: 1; 
+        }
+        
+        .card-title { 
+            font-size: 1.8rem; 
+            font-weight: bold; 
+            margin: 0 0 10px 0; 
+            color: #fff; 
+        }
+        
+        .card-desc { 
+            color: #94a3b8; 
+            font-size: 1rem; 
+            line-height: 1.5; 
+            margin: 0 0 25px 0; 
+            flex-grow: 1; 
+        }
+        
+        .play-btn { 
+            background: #1e293b; 
+            color: var(--accent); 
+            border: 1px solid var(--accent); 
+            padding: 12px; 
+            text-align: center; 
+            border-radius: 6px; 
+            font-weight: bold; 
+            transition: 0.2s; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+        }
+        
+        .game-card:hover .play-btn { 
+            background: var(--accent); 
+            color: #fff; 
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .tags { 
+            display: flex; 
+            gap: 8px; 
+            margin-bottom: 15px; 
+            flex-wrap: wrap;
+        }
+        
+        .tag { 
+            background: #334155; 
+            color: #cbd5e1; 
+            font-size: 0.75rem; 
+            padding: 5px 10px; 
+            border-radius: 4px; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+        }
+
+        footer { 
+            margin-top: auto; 
+            padding: 30px; 
+            color: #475569; 
+            font-size: 0.9rem; 
+            text-align: center; 
+            width: 100%; 
+            border-top: 1px solid #1e293b; 
+            background: #0b0f19;
+        }
+        
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            .card-image { height: 140px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>THE GAME HUB</h1>
+        <p class="subtitle">A collection of tactical, procedural, and strategic web games built from scratch. Choose your next adventure below.</p>
+    </header>
+
+    <div class="game-grid">
+        <a href="./void-sentinel/index.html" class="game-card">
+            <div class="card-image" style="background: linear-gradient(135deg, #0f172a, #1e3a8a);">🛡️</div>
+            <div class="card-content">
+                <div class="tags">
+                    <span class="tag">Tactical</span>
+                    <span class="tag">Roguelike</span>
+                </div>
+                <h2 class="card-title">Void Sentinel</h2>
+                <p class="card-desc">Survive infinite procedural sectors. Manage your Action Points, draft powerful permanent upgrades, and defeat the Void Lords.</p>
+                <div class="play-btn">Launch Game</div>
+            </div>
+        </a>
+
+        <a href="./nexus-grid/index.html" class="game-card">
+            <div class="card-image" style="background: linear-gradient(135deg, #0f172a, #4c1d95);">🎴</div>
+            <div class="card-content">
+                <div class="tags">
+                    <span class="tag">Puzzle</span>
+                    <span class="tag">Strategy</span>
+                </div>
+                <h2 class="card-title">Nexus Grid</h2>
+                <p class="card-desc">A deep, brain-burning card placement puzzle. Chain colors and numbers to build massive combos before the board locks up.</p>
+                <div class="play-btn">Launch Game</div>
+            </div>
+        </a>
+
+        <a href="./dimension-tycoon/index.html" class="game-card">
+            <div class="card-image" style="background: linear-gradient(135deg, #0f172a, #713f12);">🎲</div>
+            <div class="card-content">
+                <div class="tags">
+                    <span class="tag">Board Game</span>
+                    <span class="tag">Economy</span>
+                </div>
+                <h2 class="card-title">Dimension Tycoon</h2>
+                <p class="card-desc">Roll the dice and conquer the realms. Balance your gold and health to build the ultimate galactic trading empire.</p>
+                <div class="play-btn">Launch Game</div>
+            </div>
+        </a>
+    </div>
+
+    <footer>
+        &copy; 2024 The Game Hub. Built entirely with HTML, CSS, and vanilla JavaScript.
+    </footer>
+
+</body>
+</html>

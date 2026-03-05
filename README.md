@@ -26,4 +26,4 @@ You are humanity's last Sentinel. Survive infinite procedurally generated sector
 Because these games have zero external dependencies, running them is incredibly easy:
 1. Clone this repository to your local machine:
    ```bash
-   git clone [https://github.com/YOURUSERNAME/game-hub.git](https://github.com/YOURUSERNAME/game-hub.git)
+   git clone [https://github.com/Shubham-Zope/game-hub.git](https://github.com/Shubham-Zope/game-hub.git)

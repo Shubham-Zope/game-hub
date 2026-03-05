@@ -4,7 +4,7 @@ Welcome to **The Game Hub**, a centralized arcade featuring a collection of orig
 
 Every game in this repository is built entirely from scratch using **Vanilla HTML, CSS, and JavaScript**—no heavy game engines, no external libraries, and zero dependencies. Just pure, lightweight code designed to run instantly in any modern web browser.
 
-🌐 **[Play the Games Live Here](https://YOURUSERNAME.github.io/game-hub)** *(Replace with your actual GitHub Pages link)*
+🌐 **[Play the Games Live Here](https://Shubham-Zope.github.io/game-hub)**
 
 ---
 

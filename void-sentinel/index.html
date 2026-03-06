@@ -603,6 +603,15 @@
             state.activeAction = null;
             updateRender();
 
+            // 🛠️ BUG FIX 1: Immediate Death Check for Grenades
+            if (state.hp <= 0) {
+                setTimeout(() => { 
+                    alert(`SENTINEL KILLED IN ACTION. You blew yourself up.\nSurvived until Sector ${currentLevel + 1}.`); 
+                    location.reload(); 
+                }, 100);
+                return; 
+            }
+
             if (!entities.some(e => e.type === 'enemy')) {
                 setTimeout(() => {
                     if ((currentLevel + 1) % 5 === 0) openDraft();
@@ -650,7 +659,8 @@
             let pCell = document.getElementById(`c-${state.px}-${state.py}`);
             if (pCell) pCell.innerHTML = svgSentinel;
 
-            document.getElementById('hp').innerText = state.hp;
+            // 🛠️ BUG FIX 2: Clamp HP so it doesn't display negative numbers
+            document.getElementById('hp').innerText = Math.max(0, state.hp);
             document.getElementById('ap').innerText = state.ap;
             document.getElementById('max-ap').innerText = state.maxAp;
             document.getElementById('level').innerText = currentLevel + 1;
